@@ -3,8 +3,8 @@
 #include <string.h>
 #include <time.h>
 
-int idOfProfile = 1; /*променлива, която определя id-номера на всеки профил,
-						така че профилите да са с последователна номерация; съхранява броя профили + 1*/
+int idOfProfile = 1; /* a variable that specifies the id of each profile so that 
+			the profiles are consecutively numbered; stores the number of accounts + 1 */
 typedef struct Date
 {
 	int day;
@@ -12,8 +12,7 @@ typedef struct Date
 	int year;
 }Date;
 
-typedef struct Question /*структура, съдържаща характеристиките на всеки отделен въпрос,
-							съответно един профил може да има повече от един въпрос*/
+typedef struct Question 
 {
 	int questLength, firstAnswLength, secondAnswLength,
 	thirdAnswLength, fourthAnswLength;
@@ -29,7 +28,7 @@ typedef struct Question /*структура, съдържаща характе�
 	int fourthAnswRating;
 }Question;
 
-typedef struct Profile //структура, съдържаща характеристиките на всеки отделен профил
+typedef struct Profile 
 {
 	int id;
 	int nameLength;
@@ -51,7 +50,7 @@ typedef struct Node
 Node *head = NULL;
 Node *curr = NULL;
 
-void createList(Profile profile) //създава списък
+void createList(Profile profile) 
 {
 	Node *ptrNode = (Node*) malloc(sizeof(Node));
 	if(ptrNode == NULL)
@@ -66,10 +65,7 @@ void createList(Profile profile) //създава списък
 	head = curr = ptrNode;
 }
 
-void addToList(Profile profile) /*ще приема като параметър структурата буфер;
-								в началото на функцията проверява дали head == NULL
-								ако е вярно създава списък с параметър структурата буфер,
-								ако пък head != NULL просто добавяме нов елемент в списъка*/
+void addToList(Profile profile) 
 {
 	if (head == NULL)
 		return createList(profile);
@@ -141,7 +137,7 @@ void menu()
 	while(choise != 5);
 }
 
-char *addressOfString() //връща адреса на стринг; извиквам я всеки път, когато потребителя трябва да въвежда стринг
+char *addressOfString() // returns the address of a string; I call it every time the user has to enter a string
 {
 	int count_ch = 2, i = 0;
 	char *string_ch;
@@ -166,25 +162,24 @@ char *addressOfString() //връща адреса на стринг; извик�
 	return string_ch;
 }
 
-void readFileList() /*четем файла структура по структура като буфер и
-					накрая извиквам функцията за добавяне в списък, в която добавяме по стойност;
-					извиквам функцията винаги в началото на програмата и по този начин още преди
-					самото меню вече имам създаден списък с отделните профили, ако файлът не е празен*/
+void readFileList() /* we read file structure by structure as a buffer and
+			finally, I call up the add in list function, in which we add by value;
+			I call up the function always at the beginning of the program and so before
+			the menu itself already has a list of individual profiles created if the file is not empty  */
 {
 	int i = 0;
 	Profile profile;
 	FILE *fp;
 
 	if((fp = fopen("profiles.bin", "rb")) == NULL)
-		fp = fopen("profiles.bin", "wb"); //създава файл в случай че файлът не съществува
+		fp = fopen("profiles.bin", "wb"); 
 
 	while(1)
 	{
-		i = 0; //понеже се запазва старият резултат след прочитането на броя въпроси на предишна структура!
+		i = 0; 
 
 		if(fread(&(profile.id), sizeof(int), 1, fp) != 1)
 		{
-			//printf("NO MORE PROFILES!!");
 			break;
 		}
 
@@ -273,8 +268,7 @@ void readFileList() /*четем файла структура по структ
 	fclose(fp);
 }
 
-int addQuestions(Profile *profile)/*тук подавам по адрес, за да мога на същия адрес(profile)
-									да му задам определени въпроси; добавям въпрос\и към дадения профил*/
+int addQuestions(Profile *profile) 
 {
 	int counter = 0, size = 1;
 	char choise;
@@ -346,7 +340,7 @@ int addQuestions(Profile *profile)/*тук подавам по адрес, за 
 				exit(12);
 			}
 		}
-		else //ако потребителя въведе некоректен отговор; приключва въвеждането на въпроси
+		else 
 		{
 			printf("\nYou didn't choose anything!");
 			break;
@@ -355,8 +349,7 @@ int addQuestions(Profile *profile)/*тук подавам по адрес, за 
 	return counter;
 }
 
-void addNewProfile() /*функция за добавяне на нов профил
- 	 	 	 	 	 накрая на функцията всеки път извиквам и функцията за добавяне на въпрос\и*/
+void addNewProfile()
 {
 
 	Profile profile;
@@ -399,7 +392,7 @@ void addNewProfile() /*функция за добавяне на нов проф
 	addToList(profile);
 }
 
-void writeFileList() //записвам целият списък във файла; презаписвам файла всеки път преди края на програмата
+void writeFileList() // I overwrite the file every time before the end of the program
 {
 	int counter = 0;
 	Node *ptrNode = head;
@@ -463,7 +456,7 @@ void writeFileList() //записвам целият списък във фай�
 	fclose(fp);
 }
 
-void printList() //изкарва списъка(съдържанието на списъка до момента) на екрана
+void printList() 
 {
 	int i = 0;
 	Node *ptrNode = head;
@@ -502,7 +495,7 @@ void printList() //изкарва списъка(съдържанието на �
 	}
 }
 
-void freeList() //освобождавам заделената памет; извиквам функцията веднъж накрая на програмата
+void freeList() // I call this function only once at the end of the program
 {
 	int i = 0;
 	Node *ptrNode;
@@ -529,11 +522,10 @@ void freeList() //освобождавам заделената памет; из
 	}
 }
 
-void outputRandonProfile() /*избира произволен профил от наличните до момента;
-						избира произволно число от всички id-та до момента, които са с последователна номерация*/
+void outputRandonProfile() /* selects a random number from all ids to the moment that are consecutively numbered */
 {
 	int randId, i = 0, result, j, maxResult, temp;
-	int ratingBuff[3]; //статичен масив, който временно ще съхранява рейтингите на всеки един от отговорите на даден въпрос
+	int ratingBuff[3]; // static array that will temporarily store the ratings of each of the answers to a given question
 	char choise;
 	time_t t;
 	Node *ptrNode = head;
@@ -541,11 +533,8 @@ void outputRandonProfile() /*избира произволен профил от
 	srand((unsigned) time(&t));
 
 	do {
-		randId = rand() % idOfProfile; //извежда число от посочената граница, като започва от 0;
-	} while(randId == 0);				/*цикълът продължава докъто не се избере число различно от 0,
-											понеже не съществува профил с id == 0*/
-
-//	printf("\n%d", randId); //изкарва избраното "произволно" id
+		randId = rand() % idOfProfile; 
+	} while(randId == 0);		// there is no profile with id 0		
 
 	while (ptrNode != NULL)
 	{
@@ -618,7 +607,7 @@ void outputRandonProfile() /*избира произволен профил от
 	}
 }
 
-void deleteProfile() //изтрива профил от списъка
+void deleteProfile()
 {
 	int choise;
 	Node *ptrNode = head;
@@ -662,11 +651,9 @@ void deleteProfile() //изтрива профил от списъка
 	}
 }
 
-void changeIdNumbers() /*променям id-тата на всички профили, така че да са последователни;
- 	 	 	 	 	 	 извиквам функцията само когато изтривам елемент от списъка,
- 	 	 	 	 	 	 понеже само тогава се разбърква номерацията - id-тата вече
- 	 	 	 	 	 	 не са с последователна номерация и съответно няма как да се
- 	 	 	 	 	 	 извика и функцията за произволен профил*/
+void changeIdNumbers() /* I change the id of all accounts so that they are consistent;
+  			I call the function only when I delete an item from the list,
+  			because only then the numbering is scrambled */
 {
 	int i = 1;
 	Node *ptrNode = head;
